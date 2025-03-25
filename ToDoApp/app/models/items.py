@@ -27,7 +27,6 @@ class ItemResponse(BaseModel):
     done: bool
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    deleted_at: datetime.datetime | None
 
 
 class ItemListResponse(BaseModel):

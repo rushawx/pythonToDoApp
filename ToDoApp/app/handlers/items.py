@@ -5,7 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.engine import Item
-from app.models.items import ItemListResponse, ItemCreateRequest, ItemUpdateRequest, ItemResponse
+from app.models.items import (
+    ItemListResponse,
+    ItemCreateRequest,
+    ItemUpdateRequest,
+    ItemResponse,
+)
 from app.utils.utils import get_db
 
 
@@ -13,7 +18,9 @@ router = APIRouter(prefix="/items", tags=["items"])
 
 
 @router.post("/")
-async def create_item(item: ItemCreateRequest, db: Session = Depends(get_db)) -> ItemResponse:
+async def create_item(
+    item: ItemCreateRequest, db: Session = Depends(get_db)
+) -> ItemResponse:
     new_item = Item(**item.dict())
     new_item.id = uuid.uuid4()
     db.add(new_item)
@@ -37,7 +44,9 @@ async def get_item(item_id: uuid.UUID, db: Session = Depends(get_db)) -> ItemRes
 
 
 @router.put("/{item_id}")
-async def update_item(item_id: uuid.UUID, item_update: ItemUpdateRequest, db: Session = Depends(get_db)) -> ItemResponse:
+async def update_item(
+    item_id: uuid.UUID, item_update: ItemUpdateRequest, db: Session = Depends(get_db)
+) -> ItemResponse:
     item = db.query(Item).filter(Item.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
